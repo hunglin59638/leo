@@ -1,0 +1,16 @@
+shiny
+shinydashboard
+devtools
+BiocManager
+dplyr
+plyr
+magrittr
+purrr
+httpuv
+rlang
+tibble
+car
+ufs
+FSA
+corrplot
+emmeans
