@@ -25,13 +25,14 @@ pkgs <- read.csv(file=file.path(root_dir,"requirements.txt"), header = F)[,1]
 for (i in 1:length(pkgs)) {
   p <- pkgs[i]
   
-  if (!requireNamespace(p, quietly = TRUE)) {install.packages(p)}
+  if (!requireNamespace(p, quietly = TRUE)) {install.packages(p, repos = "https://cloud.r-project.org",
+                                                              dependencies = TRUE )}
 }
 
 bioman_pkgs <- c("AnnotationHub", "BiocGenerics", "parallel", "clusterProfiler",
                  "fgsea","DOSE")
 for (p in bioman_pkgs) {
-  if (!requireNamespace(p, quietly = TRUE)) {BiocManager::install(p)}
+  if (!requireNamespace(p, quietly = TRUE)) {cat("Installing", p, "..."); BiocManager::install(p)}
 }
 
 cat("Finished !")

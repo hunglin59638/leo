@@ -1,5 +1,6 @@
 shiny
 shinydashboard
+shinythemes
 devtools
 BiocManager
 dplyr
