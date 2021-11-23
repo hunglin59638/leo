@@ -4,3 +4,6 @@ test/
 *.Rproj
 .Rproj.user/
 .ssh/
+.RData
+.vscode/
+archive/

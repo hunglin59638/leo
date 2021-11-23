@@ -35,4 +35,4 @@ for (p in bioman_pkgs) {
   if (!requireNamespace(p, quietly = TRUE)) {cat("Installing", p, "..."); BiocManager::install(p)}
 }
 
-cat("Finished !")
+cat("Finished !\n")

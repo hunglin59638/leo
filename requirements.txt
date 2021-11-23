@@ -15,3 +15,5 @@ ufs
 FSA
 corrplot
 emmeans
+readxl
+rstatix

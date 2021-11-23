@@ -1,5 +1,5 @@
 ## Introduction
-leo is a web-interface toolkit for Laboratory of Animal Proteomics in the department of Animal Science, National Chung Hsing University
+Leo is a web-interface toolkit for Laboratory of Animal Proteomics in the department of Animal Science, National Chung Hsing University
 
 ## Requirement
 + win10
@@ -7,6 +7,8 @@ leo is a web-interface toolkit for Laboratory of Animal Proteomics in the depart
 + R
 
 ## Installation
+### Docker (Recommended)
+### Source code
 Running `setup.R` to install the package depencies.
 ```
 git clone https://github.com/hunglin59638/leo.git
