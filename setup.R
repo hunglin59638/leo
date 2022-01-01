@@ -8,6 +8,8 @@ if (Sys.info()['sysname'] == "Linux") {
   cat("Change /usr/lib/R to be writable")
   system("sudo -kS chmod -R 777 /usr/lib/R/",
          input=NULL)
+  system("sudo -kS chmod -R 777 /usr/share/R/doc/html",
+         input=NULL)
   # readline("Enter your password: ")
   cat("Installing the packages")
   devtoos_pkgs <- c("build-essential", "libssl-dev", "curl", "libssl-dev", "libxml2-dev", "libxml2-dev")
@@ -32,7 +34,8 @@ for (i in 1:length(pkgs)) {
 bioman_pkgs <- c("AnnotationHub", "BiocGenerics", "parallel", "clusterProfiler",
                  "fgsea","DOSE")
 for (p in bioman_pkgs) {
-  if (!requireNamespace(p, quietly = TRUE)) {cat("Installing", p, "..."); BiocManager::install(p)}
+  if (!requireNamespace(p, quietly=TRUE)) {cat("Installing", p, "..."); 
+    BiocManager::install(p, ask=FALSE)}
 }
 
 cat("Finished !\n")
