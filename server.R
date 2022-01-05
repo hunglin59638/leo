@@ -52,7 +52,7 @@ source(paste0(root_dir,"/modules/statisitcs.R"))
 source(paste0(root_dir,"/modules/visualize.R"))
 source(paste0(root_dir,"/modules/conversion.R"))
 source(paste0(root_dir,"/modules/orgdb.R"))
-source(paste0(root_dir,"/modules/ora"))
+source(paste0(root_dir,"/modules/ora.R"))
 
 #donwload gallus gallus database
 #ah <- AnnotationHub()
