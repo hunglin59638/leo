@@ -1,5 +1,10 @@
 #/usr/bin/env Rscript
 library(clusterProfiler)
+
+get_ora_demo <- function() {
+  file = paste0(dirname(get_file_path()),"/test/ora_demo.csv")
+  return(read.csv(file))
+}
 padjust_method <- reactive({
   padjust_methods <- input$padjust
   if(padjust.methods == "Bonferroni") {return("bonferroni")
