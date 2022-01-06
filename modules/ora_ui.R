@@ -40,10 +40,10 @@ ora_tabpanel <-
                                               "Benjamini & Hochberg","Benjamini & Yekutieli",
                                               "None"),
                                   selected="Benjamini & Hochberg"),
-                      numericInput("pvalueCutoff", 
+                      numericInput("pvalue_cutoff", 
                                    label=h4("Cutoff value of pvalue."),
                                    value=0.05),
-                      numericInput("qvalueCutoff",
+                      numericInput("qvalue_cutoff",
                                    label=h4("Cutoff value of qvalue."),
                                    value=0.2),
                       actionButton("ora_action","Submit")
