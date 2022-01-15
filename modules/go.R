@@ -1,6 +1,13 @@
 #/usr/bin/env Rscript
 library(clusterProfiler)
 source("modules/orgdb.R")
+
+get_goclass_demo <- function() {
+  file <- sub("/modules","", paste0(get_file_path(),"/test/goclass_demo.txt"))
+  df <- read.csv(file, header=F)
+  return(df[,1])
+}
+
 go_class <- function(genes, org_name, onts=c("BP","MF", "CC"), level=2) {
   genes <- as.character(genes[!is.na(genes) && genes != ""])
   org_db <- get_orgdb(org_name)
@@ -12,7 +19,6 @@ go_class <- function(genes, org_name, onts=c("BP","MF", "CC"), level=2) {
   }
   return(result)
 }
-
 
 run_go_class <- function(input, output) {
   level <- input$level_ggo
@@ -33,17 +39,21 @@ run_go_class <- function(input, output) {
   output$ggo_df <- DT::renderDataTable(
     DT::datatable(df, options=list(searching=FALSE))
   )
-  output$ggo_plot <- renderPlot({
-    if (is.null(df)) return(NULL)
-    plot_go(ggo_df=df)
-  })
   
+  if (nrow(df) > 0) {
+    output$ggo_plot <- renderPlot({
+      if (is.null(df)) return(NULL)
+      plot_go(ggo_df=df)
+    })
+    output$ggo_p_render <- renderUI({
+      downloadButton(outputId="ggo_plot_f", label="Download plot")
+    })
+  }
+
   output$ggo_f_render <- renderUI({
     downloadButton(outputId="ggo_df_f", label="Download table")
   })
-  output$ggo_p_render <- renderUI({
-    downloadButton(outputId="ggo_plot_f", label="Download plot")
-  })
+
   
   
   output$ggo_df_f <- downloadHandler(
