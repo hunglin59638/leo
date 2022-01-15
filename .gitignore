@@ -1,6 +1,5 @@
 .Rhistory
 data/
-test/
 *.Rproj
 .Rproj.user/
 .ssh/
