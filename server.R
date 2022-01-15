@@ -51,19 +51,12 @@ source(paste0(root_dir, "/modules/utils.R"))
 source(paste0(root_dir,"/modules/statisitcs.R"))
 source(paste0(root_dir,"/modules/visualize.R"))
 source(paste0(root_dir,"/modules/conversion.R"))
+source(paste0(root_dir,"/modules/go.R"))
 source(paste0(root_dir,"/modules/orgdb.R"))
 source(paste0(root_dir,"/modules/ora.R"))
 
-#donwload gallus gallus database
-#ah <- AnnotationHub()
-#databaseid<- query(ah, c("Gallus gallus","OrgDb")) 
-#gallus<- ah[[databaseid$ah_id]]
-
-
-
 shinyServer(function(input, output, session) {
   # Statisitic
-
   s_data <- eventReactive(input$s_action, {
     infile <- input$s_file
     header <- input$s_header
@@ -143,10 +136,27 @@ shinyServer(function(input, output, session) {
     run_convert_id(input, output)
     removeModal()
   })
-  
+
+  observeEvent(input$go_demo, {
+    updateTextAreaInput(session, "go_geneid", 
+                        value=paste(as.character(get_goclass_demo()), collapse="\n"))
+  })
+  observeEvent(input$go_id_clear, {
+    updateTextAreaInput(session, "go_geneid", value="")
+  })
   observeEvent(input$go_action, {
     showModal(modalDialog("In progress for grouping GO classification", footer=NULL))
     run_go_class(input, output)
+    removeModal()
+  })
+  
+  observeEvent(input$ora_demo, {
+    updateTextAreaInput(session, "ora_geneid", 
+                        value=paste(as.character(get_ora_demo()), collapse="\n"))
+  })
+  observeEvent(input$ora_action, {
+    showModal(modalDialog("In progress for Over-Representation Analysis", footer=NULL))
+    run_ora(input, output)
     removeModal()
   })
 })
