@@ -17,3 +17,5 @@ corrplot
 emmeans
 readxl
 rstatix
+parallel
+rentrez
