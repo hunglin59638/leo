@@ -6,18 +6,18 @@ file_fmt <- c("text/csv",
 go_class_tabpanel <- 
   tabPanel("GO classification", 
            fluidRow(
-             column(2, 
+             column(4, 
                     sidebarPanel(
                       width=12, 
                       h3("Provide gene ids (Entrez Gene)"),
-                      textAreaInput("go_geneid", NULL, value="93100\n223646",
+                      textAreaInput("go_geneid", NULL, value="",
                                     width="100%"),
-                      h5("or upload your own file"),
-                      fileInput(inputId="g_file", label=NULL,
-                                multiple = F, accept=file_fmt),
+                      # h5("or upload your own file"),
+                      # fileInput(inputId="g_file", label=NULL,
+                      #           multiple = F, accept=file_fmt),
                       selectInput(inputId = "species_choice",
                                   label = "Choose species",
-                                  choices = c("Chicken", "Pig", "Human"),
+                                  choices = c("Chicken", "Pig", "Human", "Acipenser ruthenus"),
                                   selected = "Chicken"),
                       checkboxGroupInput("go_term",
                                          label = h4("GO Term"),
@@ -29,12 +29,17 @@ go_class_tabpanel <-
                                                          "Molecular Function"="mf")
                                          ),
                       numericInput("level_ggo",
-                                   label = h4("Specific GO level"),
-                                   value=2,min=2),
-                      actionButton("go_action","Submit")
+                                   label = h4("GO level"),
+                                   value=2, min=2),
+                      fluidRow(
+                        column(2, actionButton("go_action", "Submit")),
+                        column(2, actionButton("go_id_clear", "Clear")),
+                        column(2, actionButton("go_demo", "Example")),
                       )
+                      )
+
                     ),
-             column(10,
+             column(8,
                     mainPanel(
                       h2("GO classification"),
                       DT::dataTableOutput("ggo_df"),
