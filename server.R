@@ -57,12 +57,19 @@ source(paste0(root_dir,"/modules/ora.R"))
 
 shinyServer(function(input, output, session) {
   # Statisitic
+  # s_file <- reactive(input$s_file)
+  s_demo <- eventReactive(input$s_example, {get_stas_demo()})
   s_data <- eventReactive(input$s_action, {
     infile <- input$s_file
     header <- input$s_header
-    if (input$s_type == "csv") {
-      exec_func(args=list(infile$datapath, header), func=read_file)
+    if (!is.null(infile$datapath)) {
+      if (input$s_type == "csv") {
+        exec_func(args=list(infile$datapath, header), func=read_file)
+      }
+    } else {
+      return(s_demo())
     }
+
   })
   
   callback <- c(

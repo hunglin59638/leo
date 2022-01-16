@@ -17,12 +17,12 @@ statistic_tabpanel <-
                                              choices=c("csv", "xslx")),
                                  checkboxInput(inputId="s_header", label="Header", 
                                                value=T),
-                                 conditionalPanel(condition="input.s_type == 'csv'",
-                                                  selectInput("s_sep", "Separator:",
-                                                              selected="comma",
-                                                              choices=c("comma","tab"))
-                                                  
-                                 ),
+                                 # conditionalPanel(condition="input.s_type == 'csv'",
+                                 #                  selectInput("s_sep", "Separator:",
+                                 #                              selected="comma",
+                                 #                              choices=c("comma","tab"))
+                                 #                  
+                                 # ),
                                  fileInput(inputId="s_file",
                                            label=NULL,
                                            multiple = F,
@@ -44,7 +44,10 @@ statistic_tabpanel <-
                                                               choices=c('Least Squares Means'),
                                                               selected='Least Squares Means')
                                  ),
-                                 actionButton(inputId="s_action", label="Run")
+                                 actionButton("s_example", "Example"),
+                                 actionButton("s_action", "Run"),
+
+                                 
                     )),
              column(10, tabsetPanel(id="s_setpanel",
                                     tabPanel("Preview", value="tab_preview",

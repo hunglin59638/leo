@@ -2,6 +2,12 @@
 pkg <- c("lattice")
 suppressMessages(invisible(lapply(pkg, require, character.only=T, quietly=T)))
 
+get_stas_demo <- function() {
+  file <- sub("/modules","", paste0(get_file_path(),"/test/stastistics_demo.csv"))
+  df <- read.csv(file, header=T)
+  return(df)
+}
+
 desc_summarize <- function(data) {
   group <- colnames(data)[1]
   value <- colnames(data)[2]
