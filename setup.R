@@ -25,7 +25,7 @@ if (os_type == "Linux") {
   ufs_pkgs <- c("libfontconfig1-dev")
   others <- c("libssl-dev")
   cmd <- c("sudo -S", "apt-get install" , devtoos_pkgs, ufs_pkgs, others, "-y")
-  if (user != "root") {
+  if (user == "root") {
     cmd <- cmd[2:length(cmd)]
   }
   cmd <- paste(cmd, collapse=" ")
