@@ -1,32 +1,37 @@
 ## Introduction
-Leo is a web-interface toolkit for Laboratory of Animal Proteomics in the department of Animal Science, National Chung Hsing University
+Leo is a web-based toolkit for Laboratory of Animal Proteomics in the department of Animal Science, National Chung Hsing University  
 
-## Requirement
-+ win10
-+ linux
-+ R
-
-## Installation
-### Docker (Recommended)
-### Source code
-Running `setup.R` to install the package depencies.
-```
-git clone https://github.com/hunglin59638/leo.git
-cd leo
-Rscript setup.py
-Rscript run.R
-```  
-
-## Usage
-+ Protein quantification
+### Analysis items  
 + Descriptive statistics
 + Normality tests
 + Heteroscedasticity test 
 + Mulitiple comparasion
 + Non-parametric tests
-+ Correlation analysis
-+ Cluster analysis
 + Gene ID conversion
 + GO classification
-+ GO over-representation test
-+ KEGG over-representation test
++ GO over-representation (enrichment) analysis
++ KEGG over-representation analysis
+## Requirement
++ linux (dev os is Ubuntu 20.04)
++ R 
+
+## Installation
+
+### Source code
+Running `setup.R` to install the package depencies.
+```
+git clone https://github.com/hunglin59638/leo.git
+cd leo
+Rscript setup.R
+Rscript run.R [port_num] # default is 6523
+```  
+
+### Docker (Recommended)
+```
+docker pull hunglin59638/leo:latest
+docker run -d -p 6523:6523 hunglin59638/leo:latest
+```
+
+## Online tool
+The temporary link: http://jp-tyo-ilj-1.natfrp.cloud:23026
+
