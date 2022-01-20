@@ -35,10 +35,10 @@ ora_tabpanel <-
                            selected="Benjamini & Hochberg"),
                numericInput("pvalue_cutoff", 
                             label=h4("Cutoff value of pvalue."),
-                            value=0.05, max=1, min=0),
+                            value=0.05, max=1, min=0, step=0.01),
                numericInput("qvalue_cutoff",
                             label=h4("Cutoff value of qvalue."),
-                            value=0.2, max=1, min=0),
+                            value=0.2, max=1, min=0, step=0.01),
                fluidRow(
                  column(2, actionButton("ora_action", "Submit")),
                  column(2, actionButton("ora_demo", "Example"))
