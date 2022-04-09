@@ -86,6 +86,8 @@ run_ora <- function(input, output) {
       "Chicken"="gga",
       "Gallus gallus"="gga",
       "Pig"="ssc",
+      "Anser cygnoides domesticus"="acyg",
+      "Swan googse"="acyg",
       "Sus scrofa"="ssc",
       "Human"="hsa",
       "Homo sapiens"="hsa",

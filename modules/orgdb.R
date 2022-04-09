@@ -12,6 +12,8 @@ get_orgdb <- function(organism="Gallus gallus") {
     organism <- "Homo sapiens"
   } else if (organism %in% c("Sterlet", "Acipenser ruthenus")) {
     organism <- "Acipenser ruthenus"
+  } else if (organism %in% c("Swan goose", "Anser cygnoides domesticus")) {
+    organism <- "Anser cygnoides_domesticus"
   }
   org_info <- subset(ah, species == organism & rdataclass == 'OrgDb')
   return(ah[[org_info$ah_id]])
