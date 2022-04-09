@@ -1,3 +1,5 @@
+Leo is freely available at http://jp-tyo-ilj-1.natfrp.cloud:23026
+
 ## Introduction
 Leo is a web-based toolkit for Laboratory of Animal Proteomics in the department of Animal Science, National Chung Hsing University  
 
@@ -18,7 +20,7 @@ Leo is a web-based toolkit for Laboratory of Animal Proteomics in the department
 ## Installation
 
 ### Source code
-Running `setup.R` to install the package depencies.
+Running `setup.R` to install all dependencies.
 ```
 git clone https://github.com/hunglin59638/leo.git
 cd leo
@@ -32,6 +34,4 @@ docker pull hunglin59638/leo:latest
 docker run -d -p 6523:6523 hunglin59638/leo:latest
 ```
 
-## Online tool
-The temporary link: http://jp-tyo-ilj-1.natfrp.cloud:23026
 
