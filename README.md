@@ -1,4 +1,4 @@
-Leo is freely available at http://jp-tyo-ilj-1.natfrp.cloud:23026
+Leo is freely available at http://jp-tyo-ntt-1.natfrp.cloud:53273
 
 ## Introduction
 Leo is a web-based toolkit for Laboratory of Animal Proteomics in the department of Animal Science, National Chung Hsing University  
