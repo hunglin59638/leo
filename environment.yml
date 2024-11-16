@@ -1,0 +1,26 @@
+name: leo
+channels:
+  - defaults
+  - conda-forge
+  - bioconda
+dependencies:
+  - r-base
+  - r-shiny
+  - r-shinythemes
+  - r-shinydashboard
+  - r-shinymobile
+  - r-dt
+  - bioconductor-clusterprofiler
+  # - r-devtools
+  - r-biocmanager
+  - r-tidyverse
+  - r-httpuv
+  - r-rlang
+  - r-car
+  - r-ufs
+  - r-fsa
+  - r-corrplot
+  - r-emmeans
+  - r-readxl
+  - r-rentrez
+  - r-rstatix
