@@ -1,24 +1,6 @@
 #!/usr/bin/env Rscript
-options(encoding="UTF-8")
-suppressPackageStartupMessages({
-  require(shiny)
-  require(AnnotationHub)
-  require(clusterProfiler)
-  require(DOSE)
-  require(AnnotationDbi)
-  require(ggplot2)
-  require(stringr)
-  require(magrittr)
-  require(dplyr)
-  require(plyr)
-  require(purrr)
-  library(rstatix)
-  library(FSA)
-  library(lattice)
-  library(car)
-  library(emmeans)
-  library(corrplot)
-})
+options(encoding = "UTF-8")
+
 
 get_file_path <- function() {
   cmdArgs <- commandArgs(trailingOnly = FALSE)
@@ -29,7 +11,7 @@ get_file_path <- function() {
     # Rscript/R console option
     scriptPath <- normalizePath(dirname(sub("^--file=", "", cmdArgs[grep("^--file=", cmdArgs)])))[1]
   } else if (Sys.getenv("RSTUDIO") == "1") {
-    if (rstudioapi::isAvailable(version_needed=NULL,child_ok=FALSE)) {
+    if (rstudioapi::isAvailable(version_needed = NULL, child_ok = FALSE)) {
       # RStudio interactive
       dirname(rstudioapi::getSourceEditorContext()$path)
     } else if (is.null(knitr::current_input(dir = TRUE)) == FALSE) {
@@ -46,32 +28,41 @@ get_file_path <- function() {
     stop("Cannot find file path")
   }
 }
-root_dir = get_file_path()
+root_dir <- get_file_path()
 source(paste0(root_dir, "/modules/utils.R"))
-source(paste0(root_dir,"/modules/statisitcs.R"))
-source(paste0(root_dir,"/modules/visualize.R"))
-source(paste0(root_dir,"/modules/conversion.R"))
-source(paste0(root_dir,"/modules/go.R"))
-source(paste0(root_dir,"/modules/orgdb.R"))
-source(paste0(root_dir,"/modules/ora.R"))
+source(paste0(root_dir, "/modules/statisitcs.R"))
+source(paste0(root_dir, "/modules/visualize.R"))
+source(paste0(root_dir, "/modules/conversion.R"))
+source(paste0(root_dir, "/modules/go.R"))
+source(paste0(root_dir, "/modules/orgdb.R"))
+source(paste0(root_dir, "/modules/ora.R"))
 
 shinyServer(function(input, output, session) {
-  # Statisitic
-  # s_file <- reactive(input$s_file)
-  s_demo <- eventReactive(input$s_example, {get_stas_demo()})
+  session$allowReconnect("force")
+
+  s_demo <- reactiveVal()
+  observeEvent(input$s_example, {
+    showModal(modalDialog(title = "Demo data is loaded", "Please click 'Run' button", easyClose = T))
+    s_demo(get_stas_demo())
+  })
+
   s_data <- eventReactive(input$s_action, {
     infile <- input$s_file
     header <- input$s_header
+    data <- NULL
     if (!is.null(infile$datapath)) {
       if (input$s_type == "csv") {
-        exec_func(args=list(infile$datapath, header), func=read_file)
+        data <- exec_func(args = list(infile$datapath, header), func = read_file)
       }
     } else {
-      return(s_demo())
+      data <- s_demo()
     }
-
+    if (is.null(data)) {
+      showModal(modalDialog(title = "Error", "No data is loaded", easyClose = T))
+    }
+    return(data)
   })
-  
+
   callback <- c(
     "var colnames = table.columns().header().to$().map(function(){return this.innerHTML;}).get();",
     "Shiny.onInputChange('colnames', colnames);",
@@ -97,32 +88,49 @@ shinyServer(function(input, output, session) {
     "});"
   )
 
-  output$s_data <- DT::renderDT(s_data(), server=T, editable="cell", 
-                                selection = 'none', callback=DT::JS(callback))
-  observeEvent(input$s_action, {run_desc(input,output,s_data())})
-  observeEvent(input$s_action, {run_normality_test(input,output,s_data())})
-  observeEvent(input$s_action, {run_hetero_test(input,output,s_data())})
+  output$s_data <- DT::renderDT(s_data(),
+    server = T, editable = "cell",
+    selection = "none", callback = DT::JS(callback)
+  )
+  observeEvent(input$s_action, {
+    run_desc(input, output, s_data())
+  })
+  observeEvent(input$s_action, {
+    run_normality_test(input, output, s_data())
+  })
+  observeEvent(input$s_action, {
+    run_hetero_test(input, output, s_data())
+  })
   observe({
     m_type <- input$m_type
-    m_methods <- if (m_type == "parametric") c('Least Squares Means') else 
-      c('Kruskal-Wallis test for equal variances', "Welch's anova for unequal variances") 
+    m_methods <- if (m_type == "parametric") {
+      c("Least Squares Means")
+    } else {
+      c("Kruskal-Wallis test for equal variances", "Welch's anova for unequal variances")
+    }
     updateSelectInput(session, "m_method",
-                      label = paste("Select a stastistical method"),
-                      choices = m_methods,
-                      selected = tail(m_methods, 1))
-    
+      label = paste("Select a stastistical method"),
+      choices = m_methods,
+      selected = tail(m_methods, 1)
+    )
   })
-  observeEvent(input$s_action, {run_sign_test(input, output, s_data())})
+  observeEvent(input$s_action, {
+    run_sign_test(input, output, s_data())
+  })
   # id conversion
-  id_types <- list(`GI number`=c("Entrez Gene (GeneID)", "Protein Accession"),
-                   `Entrez Gene (GeneID)`=c("GI number", "Protein Accession"),
-                   `Protein Accession`=c("GI number", "Entrez Gene (GeneID)"))
+  id_types <- list(
+    `GI number` = c("Entrez Gene (GeneID)", "Protein Accession"),
+    `Entrez Gene (GeneID)` = c("GI number", "Protein Accession"),
+    `Protein Accession` = c("GI number", "Entrez Gene (GeneID)")
+  )
   observeEvent(input$id_select_fr, {
     fr <- input$id_select_fr
     to <- input$id_select_to
-    updateSelectInput(session, "id_select_to", label = paste("To"),
-                      choices = id_types[[fr]],
-                      selected = head(id_types[[fr]], 1))
+    updateSelectInput(session, "id_select_to",
+      label = paste("To"),
+      choices = id_types[[fr]],
+      selected = head(id_types[[fr]], 1)
+    )
     if (fr == "GI number") {
       value <- echo_gi_demo()
     } else if (fr == "Entrez Gene (GeneID)") {
@@ -130,39 +138,40 @@ shinyServer(function(input, output, session) {
     } else if (fr == "Protein Accession") {
       value <- echo_prot_acc_demo()
     }
-    
-    updateTextAreaInput(session, "id_input", value=value)
 
+    updateTextAreaInput(session, "id_input", value = value)
   })
   observeEvent(input$id_clear, {
-    updateTextAreaInput(session, "id_input", value="")
+    updateTextAreaInput(session, "id_input", value = "")
   })
 
   observeEvent(input$id_action, {
-    showModal(modalDialog("In progress for converting gene ids", footer=NULL))
+    showModal(modalDialog("In progress for converting gene ids", footer = NULL))
     run_convert_id(input, output)
     removeModal()
   })
 
   observeEvent(input$go_demo, {
-    updateTextAreaInput(session, "go_geneid", 
-                        value=paste(as.character(get_goclass_demo()), collapse="\n"))
+    updateTextAreaInput(session, "go_geneid",
+      value = paste(as.character(get_goclass_demo()), collapse = "\n")
+    )
   })
   observeEvent(input$go_id_clear, {
-    updateTextAreaInput(session, "go_geneid", value="")
+    updateTextAreaInput(session, "go_geneid", value = "")
   })
   observeEvent(input$go_action, {
-    showModal(modalDialog("In progress for grouping GO classification", footer=NULL))
+    showModal(modalDialog("In progress for grouping GO classification", footer = NULL))
     run_go_class(input, output)
     removeModal()
   })
-  
+
   observeEvent(input$ora_demo, {
-    updateTextAreaInput(session, "ora_geneid", 
-                        value=paste(as.character(get_ora_demo()), collapse="\n"))
+    updateTextAreaInput(session, "ora_geneid",
+      value = paste(as.character(get_ora_demo()), collapse = "\n")
+    )
   })
   observeEvent(input$ora_action, {
-    showModal(modalDialog("In progress for Over-Representation Analysis", footer=NULL))
+    showModal(modalDialog("In progress for Over-Representation Analysis", footer = NULL))
     run_ora(input, output)
     removeModal()
   })

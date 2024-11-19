@@ -1,7 +1,5 @@
 # /usr/bin/env Rscript
-suppressPackageStartupMessages({
-  library(shiny, quietly = T)
-})
+
 source("modules/conversion.R")
 
 id_conv_tabpanel <-

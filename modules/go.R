@@ -1,5 +1,4 @@
 # /usr/bin/env Rscript
-library(clusterProfiler)
 source("modules/orgdb.R")
 
 get_goclass_demo <- function() {
@@ -9,7 +8,7 @@ get_goclass_demo <- function() {
 }
 
 go_class <- function(genes, org_name, onts = c("BP", "MF", "CC"), level = 2) {
-  genes <- as.character(genes[!is.na(genes) && genes != ""])
+  genes <- as.character(genes[!is.na(genes) & genes != ""])
   org_db <- get_orgdb(org_name)
   result <- list()
   for (ont in onts) {
@@ -27,7 +26,7 @@ run_go_class <- function(input, output) {
   onts <- input$go_term
   org_name <- input$species_choice
   genes <- str_split(input$go_geneid, "(\n|\\s)")[[1]]
-  genes <- genes[genes != "" & !is.na(genes)]
+  genes <- genes[genes != "" & !is.na(genes)] |> unique()
   result <- go_class(genes = genes, org_name = org_name, onts = onts, level = level)
   df <- data.frame()
   for (ont in names(result)) {
@@ -35,6 +34,7 @@ run_go_class <- function(input, output) {
     r_df$ontology <- rep(ont, nrow(r_df))
     df <- rbind(df, r_df)
   }
+  df$Count <- as.integer(df$Count)
   rownames(df) <- NULL
   df$ontology <- toupper(df$ontology)
 

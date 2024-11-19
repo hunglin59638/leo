@@ -1,4 +1,4 @@
-Leo is freely available at http://jp-tyo-ntt-1.natfrp.cloud:53273
+Leo is freely available at https://leo.hlin.tw/
 
 ## Introduction
 Leo is a web-based toolkit for Laboratory of Animal Proteomics in the department of Animal Science, National Chung Hsing University  
@@ -20,11 +20,11 @@ Leo is a web-based toolkit for Laboratory of Animal Proteomics in the department
 ## Installation
 
 ### Source code
-Running `setup.R` to install all dependencies.
+Installing all dependencies using conda.
 ```
 git clone https://github.com/hunglin59638/leo.git
 cd leo
-Rscript setup.R
+conda env create -f environment.yml or conda.lock.yml
 Rscript run.R [port_num] # default is 6523
 ```  
 

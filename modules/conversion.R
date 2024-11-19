@@ -1,5 +1,4 @@
 # /usr/bin/env Rscript
-library(rentrez)
 
 echo_gi_demo <- function() {
   ids <- as.character(c(211497, 2024483540, 2024385564, 2024387417, 2024484284, 454))
@@ -144,15 +143,29 @@ convert_id <- function(ids, fr, to) {
     `Entrez Gene (GeneID)` = "gene",
     "protein"
   )
+  result <- list()
+  tryCatch(
+    {
+      if (fr %in% c("GI number", "Protein Accession") && to == "Entrez Gene (GeneID)") {
+        result <- prot_to_gene(ids = ids, fr_db = "protein", target_db = "gene")
+      } else if ((fr == "Protein Accession" && to == "GI number") ||
+        (fr == "GI number" && to == "Protein Accession")) {
+        result <- gi_to_protein_acc(id = ids, reverse = if (fr == "GI number") F else T)
+      } else {
+        return(NULL)
+      }
+    },
+    error = function(err) {
+      showModal(modalDialog(
+        title = "NCBI ENTREZ API Error",
+        "An error occurred while fetching data from NCBI Entrez API. Please try again later.",
+        easyClose = TRUE,
+        footer = NULL
+      ))
+      return(NULL)
+    }
+  )
 
-  if (fr %in% c("GI number", "Protein Accession") && to == "Entrez Gene (GeneID)") {
-    result <- prot_to_gene(ids = ids, fr_db = "protein", target_db = "gene")
-  } else if ((fr == "Protein Accession" && to == "GI number") ||
-    (fr == "GI number" && to == "Protein Accession")) {
-    result <- gi_to_protein_acc(id = ids, reverse = if (fr == "GI number") F else T)
-  } else {
-    return(NULL)
-  }
   return(result)
 }
 

@@ -8,10 +8,9 @@ dependencies:
   - r-shiny
   - r-shinythemes
   - r-shinydashboard
-  - r-shinymobile
   - r-dt
   - bioconductor-clusterprofiler
-  # - r-devtools
+  - bioconductor-annotationhub
   - r-biocmanager
   - r-tidyverse
   - r-httpuv

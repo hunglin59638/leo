@@ -1,13 +1,7 @@
-FROM rocker/r-ver:4.1.2
-RUN apt update && \
-    apt install -y --no-install-recommends apt-utils && \
-    apt install tzdata -y && \
-    echo "Asia/Taipei" > /etc/timezone && \
-    ln -fs /usr/share/zoneinfo/Asia/Taipei /etc/localtime && \
-    dpkg-reconfigure -f noninteractive tzdata &&\
-    apt install build-essential libssl-dev curl libssl-dev libxml2-dev libxml2-dev libfontconfig1-dev libssl-dev libgit2-dev libharfbuzz-dev libfribidi-dev libcurl4-openssl-dev cmake -y
-VOLUME /root/.cache/R/AnnotationHub
+FROM mambaorg/micromamba:2.0.3
+COPY --chown=$MAMBA_USER:$MAMBA_USER conda.lock.yml /tmp/env.yaml
+RUN micromamba install -y -n base -f /tmp/env.yaml && \
+    micromamba clean --all --yes
 COPY . /opt/leo
-RUN /opt/leo/setup.R
-WORKDIR /opt/leo
-ENTRYPOINT ["./run.R"]
+VOLUME /home/$MAMBA_USER/.cache/R/AnnotationHub
+ENTRYPOINT ["/usr/local/bin/_entrypoint.sh", "/opt/leo/run.R"]

@@ -1,7 +1,4 @@
 # /usr/bin/env Rscript
-suppressPackageStartupMessages({
-  library(clusterProfiler)
-})
 
 get_ora_demo <- function() {
   file <- sub("/modules", "", paste0(get_file_path(), "/test/goclass_demo.txt"))
